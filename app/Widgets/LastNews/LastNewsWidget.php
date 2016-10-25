@@ -30,12 +30,11 @@ class LastNewsWidget extends Widget
      */
     public function index($template = null, $count = 5)
     {
-        $base_query = News::with(['translations', 'visible_category', 'visible_tags', 'visible_category', 'visible_category.parents'])
-            ->visible()
-            ->publishAtSorted()
-            ->positionSorted()
-            ->countComments();
-        $list = CacheService::init('News', 'slug', $base_query)->items()->setRange($count)->get();
+
+        dd(CacheService::init('News', 'slug')->items()->orderBy(['publish_at' => 'DESC', 'position' =>
+        'ASC']));
+
+        $list = CacheService::init('News', 'slug')->items()->setRange($count)->get();
 
         if (view()->exists('widgets.last_news.templates.'.$template.'.index')) {
 

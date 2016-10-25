@@ -25,9 +25,7 @@ class CategoriesMenu extends Widget
      */
     public function index()
     {
-        $base_query = Category::with(['childs', 'translations'])->visible();//->joinTranslations('categories', 'category_translations');
-
-        $categories = CacheService::init('Category', 'slug', $base_query)->items()->get();
+        $categories = CacheService::init('Category', 'slug')->items()->get();
 
         return view('widgets.categories_menu.index', compact('categories'))->render();
     }

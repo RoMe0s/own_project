@@ -11,11 +11,14 @@ namespace App\Models;
 use App\Contracts\FrontLink;
 use App\Contracts\MetaGettable;
 use App\Contracts\SearchableContract;
+use App\Contracts\Cachable as CachableContract;
+
 use App\Traits\Models\SearchableTrait;
 use App\Traits\Models\TaggableTrait;
 use App\Traits\Models\WithTranslationsTrait;
 use Dimsav\Translatable\Translatable;
 use App\Traits\Models\CommentableTrait;
+
 use Eloquent;
 use Carbon\Carbon;
 use Cache;
@@ -25,7 +28,7 @@ use Cache;
  * Class News
  * @package App\Models
  */
-class News extends Eloquent implements FrontLink, SearchableContract, MetaGettable
+class News extends Eloquent implements FrontLink, SearchableContract, MetaGettable, CachableContract
 {
 
     use Translatable;
@@ -33,6 +36,19 @@ class News extends Eloquent implements FrontLink, SearchableContract, MetaGettab
     use TaggableTrait;
     use SearchableTrait;
     use CommentableTrait;
+
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder;
+     */
+    public static function getBaseQuery()
+    {
+        return News::with(['translations', 'visible_category', 'visible_tags', 'visible_category', 'visible_category.parents'])
+            ->visible()
+            //->publishAtSorted()
+            //->positionSorted()
+            ->countComments();
+    }
 
     /**
      * @var array

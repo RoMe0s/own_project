@@ -8,12 +8,13 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\Cachable as CacheService;
 
 /**
  * Class Menu
  * @package App\Models
  */
-class Menu extends Model
+class Menu extends Model implements CacheService
 {
     /**
      * @var array
@@ -44,5 +45,11 @@ class Menu extends Model
     public function scopeVisible($query)
     {
         return $query->whereStatus(true);
+    }
+
+    public static function getBaseQuery()
+    {
+        return Menu::with(['visible_items', 'visible_items.translations'])
+            ->visible();
     }
 }

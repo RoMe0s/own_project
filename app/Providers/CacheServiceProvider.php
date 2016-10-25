@@ -14,8 +14,7 @@ class CacheServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //CacheService::init('News', 'slug')->items()->get();
-        dd(cache()->items()->get());
+        cache()->setBasic();
     }
 
     /**
@@ -28,7 +27,7 @@ class CacheServiceProvider extends ServiceProvider
         $this->app->singleton(
             'cacheService',
             function () {
-                return CacheService::init('News', 'slug');
+                return new CacheService();//::init('News', 'slug');
             }
         );
     }

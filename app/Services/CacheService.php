@@ -7,6 +7,7 @@
  */
 
 namespace App\Services;
+use App\Models\News;
 use Carbon\Carbon;
 use Redis;
 use Cache;
@@ -28,7 +29,7 @@ class CacheService
      * @param string $key_field
      * @param object $query
      */
-    function __construct($classname, $key_field, $query = null)
+    function __construct($classname = '', $key_field = '', $query = null)
     {
         static::$classname = $classname;
 
@@ -51,14 +52,34 @@ class CacheService
     }
 
     /**
+     * @param string $classname
+     * @param string $key_field
+     * @param object $query
+     * @return \App\Services\CacheService
+     */
+    public function setParams($classname, $key_field, $query = null)
+    {
+        static::$classname = $classname;
+
+        static::$keyfield = $key_field;
+
+        if(isset($query)) {
+            $this->cacheQuery($query);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $like_array
      * @return array
      */
-    private function _fetchAll()
+    private function _fetchAll($like_array = false)
     {
         $result = [];
-        foreach (Redis::hgetall("laravel:$this->_getClass:items") as $key => $item) {
-            $item = unserialize($item);
-            $result[$item->{static::$keyfield}] = $item;
+            foreach (Redis::hgetall("laravel:$this->_getClass:items") as $key => $item) {
+                $item = unserialize($item);
+                $result[(string)$item->{static::$keyfield}] = ($like_array) ? $item->toArray() : $item;
         }
         return $result;
     }
@@ -215,21 +236,74 @@ class CacheService
     }
 
     /**
-     * @param string $key
+     * @param string|array $key
      * @param string $type = DESC, ASC
      * @return $this
      */
     public function orderBy($key, $type = 'ASC')
     {
-        $keys = $this->_getKeys($key);
+        if(!is_array($key)) {
+            $keys = $this->_getKeys($key);
 
-        switch (strtolower($type)) {
-            case 'desc':
-                arsort($keys, TRUE);
-                break;
-            default:
-                asort($keys, TRUE);
-                break;
+            switch (strtolower($type)) {
+                case 'desc':
+                    arsort($keys, TRUE);
+                    break;
+                default:
+                    asort($keys, TRUE);
+                    break;
+            }
+        } elseif(count($key) > 0) {
+
+            $result = [];
+
+            $new_poses = [];
+
+            array_map(function($value) use(&$new_poses, &$result, $key){
+
+                $tmp_result = [];
+
+                foreach ($key as $field => $type) {
+
+                    $keys = $this->_getKeys($field);
+
+                    switch (strtolower($type)) {
+                        case 'desc':
+                            arsort($keys);
+                            break;
+                        default:
+                            asort($keys);
+                            break;
+                    }
+
+                    $iterator = 0;
+
+                    foreach($keys as $key_item => $item) {
+                        $tmp_result[$item][] = $key_item;
+                    }
+
+                }
+
+                dd($tmp_result);
+
+            }, static::$positions);
+
+            dd($new_poses);
+
+            foreach ($key as $field => $type) {
+
+                $keys = $this->_getKeys($field);
+
+                switch (strtolower($type)) {
+                    case 'desc':
+                        arsort($keys);
+                        break;
+                    default:
+                        $type = 4;
+                        break;
+                }
+
+            }
         }
 
         static::$positions = array_keys($keys);
@@ -267,6 +341,19 @@ class CacheService
             }
         }
     }*/
+
+
+    /**
+     * Get base queries on app init
+     */
+    public function setBasic()
+    {
+        foreach(config('cacheservice.base') as $model => $keyfield) {
+
+            $this->setParams(class_basename($model), $keyfield, $model::getBaseQuery());
+
+        }
+    }
 
     /**
      * @param string|int $key

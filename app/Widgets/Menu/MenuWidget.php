@@ -25,11 +25,7 @@ class MenuWidget extends Widget
      */
     public function index($name)
     {
-        $base_query = Menu::with(['visible_items', 'visible_items.translations'])
-            ->where('name', $name)
-            ->visible();
-
-        $model = CacheService::init('Menu', 'name', $base_query)->items()->first();
+        $model = CacheService::init('Menu', 'name')->items()->where($name)->first();
 
         if (view()->exists('widgets.menu.templates.' . $model->name . '.index'))
         {

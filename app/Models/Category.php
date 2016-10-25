@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Contracts\FrontLink;
 use App\Contracts\MetaGettable;
 use App\Contracts\SearchableContract;
+use App\Contracts\Cachable as CacheContract;
+
 use App\Traits\Models\SearchableTrait;
 use App\Traits\Models\WithTranslationsTrait;
 use Dimsav\Translatable\Translatable;
@@ -14,7 +16,7 @@ use Eloquent;
  * Class Category
  * @package App\Models
  */
-class Category extends Eloquent implements FrontLink, SearchableContract, MetaGettable
+class Category extends Eloquent implements FrontLink, SearchableContract, MetaGettable, CacheContract
 {
     use Translatable;
     use WithTranslationsTrait;
@@ -53,6 +55,11 @@ class Category extends Eloquent implements FrontLink, SearchableContract, MetaGe
      * @var array
      */
     protected $guarded = [];
+
+    public static function getBaseQuery()
+    {
+        return Category::with(['childs', 'translations'])->visible();
+    }
 
     /**
      * @param string $value
