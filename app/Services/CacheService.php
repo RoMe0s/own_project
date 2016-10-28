@@ -72,14 +72,15 @@ class CacheService
 
     /**
      * @param boolean $like_array
+     * @param array $keys
      * @return array
      */
-    private function _fetchAll($like_array = false)
+    public function fetchAll($like_array = false, $keys = [])
     {
         $result = [];
             foreach (Redis::hgetall("laravel:$this->_getClass:items") as $key => $item) {
                 $item = unserialize($item);
-                $result[(string)$item->{static::$keyfield}] = ($like_array) ? $item->toArray() : $item;
+                $result[(string)$item->{static::$keyfield}] = ($like_array) ? sizeof($keys) ? array_intersect_key($item->toArray(), array_flip($keys)) : $item->toArray() : $item;
         }
         return $result;
     }
@@ -155,7 +156,7 @@ class CacheService
      */
     public function items()
     {
-        static::$data = $this->_fetchAll();
+        static::$data = $this->fetchAll();
 
         static::$positions = $this->_getPositions();
 
@@ -242,71 +243,53 @@ class CacheService
      */
     public function orderBy($key, $type = 'ASC')
     {
+
         if(!is_array($key)) {
             $keys = $this->_getKeys($key);
 
-            switch (strtolower($type)) {
-                case 'desc':
-                    arsort($keys, TRUE);
-                    break;
-                default:
-                    asort($keys, TRUE);
-                    break;
-            }
-        } elseif(count($key) > 0) {
+                switch (strtolower($type)) {
+                    case 'desc':
+                        arsort($keys, TRUE);
+                        break;
+                    default:
+                        asort($keys, TRUE);
+                        break;
+                }
+
+            static::$positions = array_keys($keys);
+        } else {
+
+            $data = $this->fetchAll(true, ['publish_at', 'position', static::$keyfield]);
 
             $result = [];
 
-            $new_poses = [];
+            foreach($key as $field => $type) {
 
-            array_map(function($value) use(&$new_poses, &$result, $key){
+                $order_type = SORT_ASC;
 
-                $tmp_result = [];
+                if(strtolower($type) == 'desc') $order_type = SORT_DESC;
 
-                foreach ($key as $field => $type) {
+                $result[] = $this->_getKeys($field);
 
-                    $keys = $this->_getKeys($field);
-
-                    switch (strtolower($type)) {
-                        case 'desc':
-                            arsort($keys);
-                            break;
-                        default:
-                            asort($keys);
-                            break;
-                    }
-
-                    $iterator = 0;
-
-                    foreach($keys as $key_item => $item) {
-                        $tmp_result[$item][] = $key_item;
-                    }
-
-                }
-
-                dd($tmp_result);
-
-            }, static::$positions);
-
-            dd($new_poses);
-
-            foreach ($key as $field => $type) {
-
-                $keys = $this->_getKeys($field);
-
-                switch (strtolower($type)) {
-                    case 'desc':
-                        arsort($keys);
-                        break;
-                    default:
-                        $type = 4;
-                        break;
-                }
-
+                $result[] = $order_type;
             }
-        }
 
-        static::$positions = array_keys($keys);
+            $result[] = &$data;
+
+            call_user_func_array('array_multisort', $result);
+
+            unset($result);
+
+            $new_keys = [];
+
+            $keyfield = static::$keyfield;
+
+            foreach($data as $item) {
+                $new_keys[] = $item["$keyfield"];
+            }
+
+            static::$positions = array_intersect($new_keys, static::$positions);
+        }
 
         return $this;
     }

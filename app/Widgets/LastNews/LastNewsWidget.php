@@ -31,10 +31,7 @@ class LastNewsWidget extends Widget
     public function index($template = null, $count = 5)
     {
 
-        dd(CacheService::init('News', 'slug')->items()->orderBy(['publish_at' => 'DESC', 'position' =>
-        'ASC']));
-
-        $list = CacheService::init('News', 'slug')->items()->setRange($count)->get();
+        $list = CacheService::init('News', 'slug')->items()->setRange($count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
 
         if (view()->exists('widgets.last_news.templates.'.$template.'.index')) {
 

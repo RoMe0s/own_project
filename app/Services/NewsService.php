@@ -139,7 +139,7 @@ class NewsService
     {
         try {
                 if($use_cache) {
-                    $list = CacheService::init('News', 'slug')->items()->getRange(5, $count);
+                    $list = CacheService::init('News', 'slug')->items()->setRange(5, $count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
                 } else {
                     $list = News::with(['comments', 'translations'])->visible()->publishAtSorted()->positionSorted()->limit(5)->offset($count)->get();
                 }

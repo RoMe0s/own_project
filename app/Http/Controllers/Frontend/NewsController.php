@@ -48,7 +48,7 @@ class NewsController extends FrontendController
      */
     public function show($slug = '')
     {
-        $query = News::with(['translations', 'visible_category', 'visible_tags', 'visible_category', 'visible_category.parents', 'comments'])->visible()->whereSlug($slug);
+        $query = News::with(['translations', 'visible_category', 'visible_tags', 'visible_category.translations', 'visible_category.parents', 'comments'])->visible()->whereSlug($slug);
 
         $model = CacheService::init('News', 'slug')->items()->getAndSetIfNotExist($slug, $query);
 

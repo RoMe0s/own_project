@@ -18,5 +18,8 @@ return array (
     'sign up' => 'Регистрация',
     'password' => 'Пароль',
     'remember password' => 'Восстановить пароль',
-    'profile' => 'Профиль'
+    'profile' => 'Профиль',
+    'already have?' => 'Уже есть аккаунт?',
+    'next step' => 'Следующий шаг',
+    'subscribe' => 'Подписаться'
 );

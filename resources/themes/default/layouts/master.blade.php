@@ -18,5 +18,6 @@
     </div>
     @include('partials.footer')
     @include('partials.scripts')
+    {{-- @include('partials.popups.register') --}}
 </body>
 </html>

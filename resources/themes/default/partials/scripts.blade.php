@@ -55,6 +55,7 @@
        });
             $(document).on('click', '#auth_popup > div.close_button > a', function () {
                 $('#auth_popup').remove();
+                $('body').css('overflow', 'auto');
             });
             $(document).on('submit', '#auth_popup form', function () {
                 var status = true;
@@ -85,6 +86,7 @@
             $.get('/auth/login').done(function(respone){
               if(respone.status == 'success') {
                   $('div.footer').after(respone.html);
+                  $('body').css('overflow', 'hidden');
               } else {
                   error_message(respone.status, respone.message);
               }
@@ -98,5 +100,14 @@
         $(document).on('click', 'img.joe_sounson', function () {
            error_message('success', 'Я Джо Соунсон!!! И я прикачу за тобой');
         });
+
+        //POPUP
+        function pos(_this){
+                let content = _this.find('.popup-content');
+
+                let margin_height = ( ($(window).height() - content.height()) / 2 ) - 88;
+
+                content.css('margin-top', margin_height);
+        }
     });
 </script>

@@ -118,6 +118,14 @@ $router->group(
                     ['as' => 'auth.post.login', 'uses' => 'Frontend\AuthController@postLogin']
                 );
                 $router->get(
+                    'register',
+                    ['as' => 'auth.get.register', 'uses' => 'Frontend\AuthController@getRegister']
+                );
+                $router->post(
+                    'register',
+                    ['as' => 'auth.post.register', 'uses' => 'Frontend\AuthController@postRegister']
+                );
+                $router->get(
                   'logout',
                     ['as' => 'auth.logout', 'uses' => 'Frontend\AuthController@getLogout']
                 );
