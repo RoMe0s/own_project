@@ -31,7 +31,8 @@
   "scripts": {
     "gulp": "gulp",
     "gulp-watch": "gulp watch",
-    "bower": "bower install"
+    "bower": "bower install",
+    "postinstall": "bower install && gulp --production"
   },
   "devDependencies": {
     "gulp-ruby-sass": "~0.5.0"
