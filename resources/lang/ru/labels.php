@@ -164,6 +164,8 @@ return array (
     'category_editing' => 'Редактирование категории',
     'categories_list' => 'Список категорий',
     'add_category' => 'Добавить категорию',
+    'oauth' => 'OAuth',
+    'add_oauth' => 'Добавить OAuth',
   'no' => 'Нет',
   'no_articles' => 'Статьи отсутствуют',
   'no_campaigns' => 'Нет открытых кампаний',

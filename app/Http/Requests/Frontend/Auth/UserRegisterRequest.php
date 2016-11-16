@@ -10,6 +10,7 @@ namespace App\Http\Requests\Frontend\Auth;
 
 use App\Http\Requests\FormRequest;
 use App\Models\UserInfo;
+use App\Http\Requests\Request;
 
 /**
  * Class UserRegisterRequest
@@ -26,12 +27,12 @@ class UserRegisterRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'                  => 'required',
-            'email'                 => 'required|email|unique:users',
-            'phone'                 => 'string|regex:/^\+[0-9]+$/|max:17|min:' . config('user.min_phone_length'),
-            'password'              => 'required|confirmed:password_confirmation|min:' .
+            'name'                  => 'required_with:password',
+            'email'                 => 'required_without:name,password,password_confirmation|email|unique:users',
+            //'phone'                 => 'string|regex:/^\+[0-9]+$/|max:17|min:' . config('user.min_phone_length'),
+            'password'              => 'required_with:name|confirmed:password_confirmation|min:' .
                 config('auth.passwords.min_length'),
-            'password_confirmation' => 'required',
+            'password_confirmation' => 'required_with:password',
         ];
         
         return $rules;

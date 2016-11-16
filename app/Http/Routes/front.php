@@ -129,6 +129,10 @@ $router->group(
                   'logout',
                     ['as' => 'auth.logout', 'uses' => 'Frontend\AuthController@getLogout']
                 );
+                $router->get(
+                    'with/{provider}',
+                    ['as' => 'auth.oauth', 'uses' => 'Frontend\AuthController@oauth']
+                );
             }
         );
     }

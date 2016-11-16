@@ -1,16 +1,3 @@
-<style media="all">
-    .footer .subscribe_border {
-        border: 2px solid black;
-        padding: 3px;
-    }
-    .footer .subscribe_border:last-child{
-        background-color: black;
-        color: white;
-    }
-    .footer .subscribe_border:last-child:hover{
-            
-    }
-</style>
 <div class="footer">
     <div class="container">
         <div class="form-group col-md-4">
@@ -20,15 +7,12 @@
                 <a href="/" class="input-group-addon subscribe_border" id="basic-addon2">{!! trans('front_labels.subscribe') !!}</a>
             </div>
         </div>
-        <div class="col-md-4 text-center">
-            1
+
+        <div class="col-md-8 text-center" style="line-height: 80px;">
+            <p>
+                Copyright 2016 | <a>azazaza</a>
+            </p>
         </div>
-        <div class="col-md-4 text-center">
-            <ul>
-                <li>
-                    <a href="{!! route('home') !!}">{!! trans('front_labels.main page') !!}</a>
-                </li>
-            </ul>
-        </div>
+
     </div>
 </div>    

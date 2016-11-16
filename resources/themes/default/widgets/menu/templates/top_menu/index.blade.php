@@ -1,59 +1,93 @@
-<div class="top-menu">
-<div class="auth pull-right">
-    @if(!$user)
-        @if(Request::url() != route('auth.get.login'))
-            <a href="{!! route('auth.get.login') !!}" class="col-md-12 text-right auth_popup_button" style="color:black; font-size: 18px; line-height: 19px;">
-                @else
-                    <a class="col-md-12 text-right auth_popup_button" style="color:black; font-size: 18px; line-height: 19px; pointer-events: none;">
-                        @endif
-                        <i class="fa fa-sign-in" aria-hidden="true"></i>
-                        {!! trans('front_labels.sign in') !!}
-                    </a>
-                    <a class="col-md-12 text-right" style="font-size:14px; line-height: 15px;">
-                        {!! trans('front_labels.sign up') !!}
-                    </a>
-                    @else
-                        <a href="{!! route('auth.logout') !!}" class="col-md-12 text-right" style="color:black; font-size: 18px; line-height: 19px;">
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
-                            {!! trans('front_labels.sign out') !!}
-                        </a>
-                        @if(Request::url() != route('profiles.index'))
-                            <a href="{!! route('profiles.index') !!}" class="col-md-12 text-right" style="font-size:14px; line-height: 15px;">
-                                @else
-                                    <a class="col-md-12 text-right" style="font-size:14px; line-height: 15px;">
-                                        @endif
-                                        {!! trans('front_labels.profile') !!}
-                                    </a>
-        @endif
-</div>
-    <img src="/uploads/test.jpg" style="position: absolute; top:10px; right: 0px; height: 150px; width:350px;" class="joe_sounson">
-    <div class="search">
+<div class="mobile-top-panel">
+    <div class="menu-mobile-button">
+        <a>
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </a>
+    </div>
+    <div class="menu-mobile-search">
         {!! Form::open(['url' => route('search.index'), 'method' => 'GET']) !!}
-        {!! Form::text('search_text', null, ['placeholder' => trans('front_labels.search'), 'required']) !!}
-        {!! Form::submit('') !!}
+        {!! Form::text('search_text', null, ['placeholder' => trans('front_labels.search'), 'required', 'title' => trans('front_labels.search')]) !!}
+        <a onclick="$('.menu-mobile-search form').submit();">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </a>
         {!! Form::close() !!}
     </div>
-    <span class="menu"></span>
-    <ul>
-        @if(sizeof($model->visible_items))
-            @foreach($model->visible_items as $item)
-                @if($item->link != Request::path())
-                    <li>
-                        <a href="{!! $item->link !!}" title="{!! $item->title !!}">
-                            {!! $item->name !!}
-                        </a>
-                    </li>
-                @else
-                    <li class="active">
-                        <a href="{!! $item->link !!}" title="{!! $item->title !!}">
-                            {!! $item->name !!}
-                        </a>
-                    </li>
-                @endif
-            @endforeach
-        @endif
-        <div class="clearfix"> </div>
-    </ul>
 </div>
-<div class="clearfix"></div>
+<nav id="top_menu" class="text-center">
+        <ul>
+            <div class="left_part">
+                @if(sizeof($model->visible_items))
+                    @foreach($model->visible_items as $key => $item)
+                        @if($item->link == Request::path())
+                            <li class="active">
+                        @else
+                            <li>
+                                @endif
+                                <a href="{!! $item->link !!}" title="{!! $item->title !!}">
+                                    {!! $item->name !!}
+                                </a>
+                            </li>
+                            @endforeach
+                        @endif
+            </div>
+            <div class="right_part">
+                @if(!$user)
+                    @if(Request::url() != route('auth.get.login'))
+                        <li>
+                            <a href="{!! route('auth.get.login') !!}" class="auth_popup_button">
+                    @else
+                        <li class="active">
+                            <a>
+                                @endif
+                                {!! trans('front_labels.sign in') !!}
+                            </a>
+                        </li>
+                        @if(Request::url() != route('auth.get.register'))
+                            <li>
+                                <a href="{!! route('auth.get.register') !!}" class="register_popup_button">
+                        @else
+                            <li class="active">
+                                <a>
+                                    @endif
+                                    {!! trans('front_labels.sign up') !!}
+                                </a>
+                            </li>
+                            @else
+                                @if(Request::url() != route('profiles.index'))
+                                    <li>
+                                        <a href="{!! route('profiles.index') !!}">
+                                @else
+                                    <li class="active">
+                                        <a>
+                                            @endif
+                                            {!! trans('front_labels.profile') !!}
+                                        </a>
+
+                                    </li>
+                                    /
+                                    <li>
+                                        <a href="{!! route('auth.logout') !!}">
+                                            {!! trans('front_labels.sign out') !!}
+                                        </a>
+                                    </li>
+                                @endif
+                                <li class="search_form">
+                                    {!! Form::open(['url' => route('search.index'), 'method' => 'GET']) !!}
+                                    {!! Form::text('search_text', null, ['placeholder' => trans('front_labels.search'), 'required', 'title' => trans('front_labels.search')]) !!}
+                                    {!! Form::close() !!}
+                                </li>
+                                <li class="show_search">
+                                    <a href="#" class="blacked">
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="blacked">
+                                        <i class="fa fa-bars" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+            </div>
+        </ul>
+    </nav>
 <!---//End-top-nav---->
+    <div class="clearfix"></div>

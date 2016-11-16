@@ -1,0 +1,73 @@
+.popup
+  position: fixed
+  height: 100%
+  width: 100%
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: white
+  display: block
+  z-index: 88
+  color: #698ab0
+  a
+    cursor: pointer
+  ul.oauth_info
+    list-style: none
+    margin: 20px
+    li
+      display: inline-block
+      img
+        border-radius: 100%
+        border: 2px solid
+      span
+        font-size: 36px
+        line-height: 54px
+  .errors
+    color: red
+    margin: 0
+    padding: 0
+  .info
+    color: black
+  .close_button, .go_back_button, .close_button_noactive
+    padding: 10px 25px
+    font-size: 48px
+  form
+    input
+      background-color: transparent
+      color: black
+      font-size: 18px
+      border: 2px solid #3e5775
+      margin: 20px
+      width: 100%
+      padding: 10px 25px 10px 10px
+      border-radius: 3px
+      &[type="submit"]
+        background-color: #698ab0
+        color: white
+    i.error
+      position: absolute
+      right: 5px
+      top: 28%
+      font-size: 42px
+      color: red
+
+/*message popup
+
+div.messages
+  position: fixed
+  width: 250px
+  bottom: 5px
+  right: 5px
+  z-index: 9999
+
+.message_popup
+  margin-top: 5px
+  width: 100%
+  border: 3px solid black
+  background-color: white
+  padding: 3px
+  word-wrap: normal
+  a
+    padding: 0
+    margin: 0

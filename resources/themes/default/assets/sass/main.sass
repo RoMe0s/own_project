@@ -1,0 +1,22 @@
+$phone: 320px
+$tablet: 774px
+$desktop: 1024px
+
+@mixin bp($media, $endmedia: 0)
+  @if $endmedia != 0 and $endmedia > $media
+    @media only screen and (min-width: $media) and (max-width: $endmedia - 1)
+      @content
+  @else if $media == $tablet
+    @media only screen and (min-width: $tablet) and (max-width: $desktop - 1)
+      @content
+  @else if $media == $desktop
+    @media only screen and (min-width: $desktop)
+      @content
+  @else if $media == $phone
+    @media only screen and (min-width: $phone) and (max-width: $tablet - 1)
+      @content
+
+@import "partials/global"
+@import "partials/other"
+@import "partials/popups"
+@import "partials/topmenu"

@@ -165,6 +165,17 @@ $router->group(
                     'translation/{group}',
                     ['as' => 'admin.translation.update', 'uses' => 'Backend\TranslationController@update']
                 );
+
+                //oatuh
+                $router->post(
+                    'oauth/{id}/ajax_field',
+                    [
+                        'middleware' => ['ajax'],
+                        'as'         => 'admin.oauth.ajax_field',
+                        'uses'       => 'Backend\OauthController@ajaxFieldChange',
+                    ]
+                );
+                $router->resource('oauth', 'Backend\OauthController');
             }
         );
 

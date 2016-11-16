@@ -15,11 +15,16 @@ return array (
     'main page' => 'Главная',
     'sign in'  => 'Вход',
     'sign out' => 'Выход',
+    'registration completion' => 'Завершение регистрации',
     'sign up' => 'Регистрация',
     'password' => 'Пароль',
     'remember password' => 'Восстановить пароль',
     'profile' => 'Профиль',
     'already have?' => 'Уже есть аккаунт?',
     'next step' => 'Следующий шаг',
-    'subscribe' => 'Подписаться'
+    'subscribe' => 'Подписаться',
+    'password confirmation' => 'Подтверждение пароля',
+    'register' => 'Регистрация',
+    'loading' => 'Загрузка...',
+    'tries' => 'Попытка'
 );

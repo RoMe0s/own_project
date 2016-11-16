@@ -51,9 +51,9 @@ class FormRequest extends IlluminateRequest
      */
     public function response(array $errors)
     {
-        if (!$this->ajax() && !$this->wantsJson()) {
+/*        if (!$this->ajax() && !$this->wantsJson()) {
             FlashMessages::add("error", trans("messages.validation_failed"));
-        }
+        }*/
 
         foreach ($errors as $key => $error) {
             preg_match_all('/.*\s([a-zA-z0-9\.*]+)\s.*/iUs', $errors[$key][0], $matches);

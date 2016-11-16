@@ -12,7 +12,6 @@ use App\Events\Backend\PageDelete;
 use App\Http\Requests\Backend\Page\PageCreateRequest;
 use App\Http\Requests\Backend\Page\PageUpdateRequest;
 use App\Models\Page;
-use App\Models\User;
 use App\Services\PageService;
 use App\Traits\Controllers\AjaxFieldsChangerTrait;
 use Datatables;

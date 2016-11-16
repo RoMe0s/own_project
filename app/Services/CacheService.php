@@ -259,7 +259,7 @@ class CacheService
             static::$positions = array_keys($keys);
         } else {
 
-            $data = $this->fetchAll(true, ['publish_at', 'position', static::$keyfield]);
+            $data = $this->fetchAll(true, [ implode(',', array_keys($key)), static::$keyfield ]);
 
             $result = [];
 

@@ -188,4 +188,9 @@ class User extends SentryUser implements FrontLink
     {
         return localize_route('profiles.show', $this->id);
     }
+
+    public function oauths()
+    {
+        return $this->hasMany('App\Models\UsersOauths', 'user_id');
+    }
 }

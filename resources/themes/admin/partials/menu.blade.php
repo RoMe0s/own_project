@@ -175,6 +175,22 @@
             @endif
 
             <li class="header">@lang('labels.settings')</li>
+            @if ($user->hasAccess('oauth.read'))
+                <li class="{!! active_class('admin.oauth.index*') !!}">
+                    <a href="{!! route('admin.oauth.index') !!}">
+                        <i class="fa fa-key"></i>
+                        <span>@lang('labels.oauth')</span>
+
+                        @if ($user->hasAccess('oauth.create'))
+                            <small class="label create-label pull-right bg-green" title="@lang('labels.add_oauth')"
+                                   data-href="{!! route('admin.oauth.create') !!}">
+                                <i class="fa fa-plus"></i>
+                            </small>
+                        @endif
+                    </a>
+                </li>
+            @endif
+
             @if ($user->hasAccess('variable.read'))
                 <li class="treeview {!! active_class('admin.variable*') !!}">
                     <a href="#">

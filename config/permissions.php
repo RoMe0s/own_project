@@ -89,4 +89,10 @@ return array (
     'group.read',
     'group.write',
     'group.delete',
+
+    'oauth.create',
+    'oauth.read',
+    'oauth.write',
+    'oauth.delete',
+    
 );

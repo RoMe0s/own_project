@@ -15,11 +15,13 @@
                 {!! $errors->first() !!}
             @endif
         </p>
-        <div class="col-md-8 col-md-offset-2">
-            {!! Form::text('email', null, ['class' => 'required', 'placeholder' => trans('front_labels.email')]) !!}
-        </div>
-        <div class="col-md-8 col-md-offset-2">
-            {!! Form::password('password', ['class' => 'required', 'placeholder' => trans('front_labels.password')]) !!}
+        <div class="fields">
+            <div class="col-md-8 col-md-offset-2">
+                {!! Form::text('email', null, ['class' => 'required', 'placeholder' => trans('front_labels.email'), 'title' => trans('front_labels.email')]) !!}
+            </div>
+            <div class="col-md-8 col-md-offset-2">
+                {!! Form::password('password', ['class' => 'required', 'placeholder' => trans('front_labels.password'), 'title' => trans('front_labels.password')]) !!}
+            </div>
         </div>
         <div class="col-md-4 col-md-offset-4">
             {!! Form::submit(trans('front_labels.sign in')) !!}
@@ -27,15 +29,14 @@
         {!! Form::close() !!}
     </div>
     <div class="clearfix"></div>
-    <div class="text-center">
-        <a>
-            {!! trans('front_labels.sign up') !!}
-
-        </a>
+    <div class="text-center links">
+        <a class="register_popup_button" href="{!! route('auth.get.register') !!}">
+            {!! trans('front_labels.sign up') !!}</a>
         /
         <a>
             {!! trans('front_labels.remember password') !!}
         </a>
+        @widget__oauth()
     </div>
     @include('partials.popups.bottom')
 </div>

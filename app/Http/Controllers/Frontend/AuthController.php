@@ -2,6 +2,8 @@
 
 use App\Events\Frontend\UserRegister;
 use App\Exceptions\NotValidImageException;
+use App\Http\Requests\Frontend\Auth\UserEmailRequest;
+use App\Models\Oauth;
 use App\Services\AuthService;
 use App\Http\Requests\Frontend\Auth\UserRegisterRequest;
 use App\Models\User;
@@ -81,6 +83,7 @@ class AuthController extends FrontendController
                 ];
             }
         } else {
+            \Meta::title(trans('front_labels.sign in'));
             return $this->render('auth.login');
         }
     }
@@ -92,6 +95,15 @@ class AuthController extends FrontendController
      */
     public function postLogin(Request $request, $credentials = [])
     {
+
+        //Login with oauth password
+        if(session()->has('oauth_user')) {
+            $credentials = [
+                'email' => session()->get('oauth_user')['email'],
+                'password' => $request->input('password')
+            ];
+        }
+        //Default login
         $credentials = !empty($credentials) ? $credentials : [
             'email'    => request('email'),
             'password' => request('password'),
@@ -99,7 +111,16 @@ class AuthController extends FrontendController
         
         try {
             if ($user = $this->authService->login($credentials)) {
-                FlashMessages::add('success', trans('messages.you have successfully logged in'));
+
+                FlashMessages::add('success', isset($user->name) ? trans('front_messages.hello') . $user->name : trans('front_messages.hello') . $user->email);
+
+                //If oauth then update users_oauths table
+                if(session()->has('oauth_user')) {
+
+                    $this->authService->proccessOauth($user, session()->pull('oauth_user'));
+
+                }
+
                 if($request->ajax()) {
                     return ['status' => 'success', 'redirect' => $this->getRedirectTo()];
                 } else {
@@ -120,16 +141,17 @@ class AuthController extends FrontendController
             $error = trans('messages.user with such email was not activated');
         } catch (UserSuspendedException $e) {
             $error = trans('messages.user with such email was blocked');
-            
+
             $user = User::where('email', $credentials['email'])->first();
-            
+
             $throttle = Sentry::findThrottlerByUserId($user->id);
-            
+
             $timestamp = strtotime($throttle->suspended_at);
             if ($timestamp) {
                 $suspensionTime = $throttle->getSuspensionTime();
+
                 $carbon = Carbon::createFromTimestamp($timestamp)->addMinutes($suspensionTime);
-                
+
                 $error .= ' '.trans('messages.to').' '.$carbon->format('d.m.Y H:i');
             }
         } catch (UserBannedException $e) {
@@ -151,72 +173,144 @@ class AuthController extends FrontendController
     {
         Sentry::logout();
         
-        FlashMessages::add('notice', trans('messages.you have successfully logout'));
-        
         return redirect()->home();
     }
     
     /**
      * @return array
      */
-    public function getRegister()
+    public function getRegister(Request $request)
     {
-        $genders = [];
+        if(Sentry::check()) {
+            return redirect($this->getRedirectTo());
+        }
+/*        $genders = [];
         foreach (UserInfo::$genders as $gender) {
             $genders[$gender] = trans('labels.'.$gender);
         }
-        $this->data('genders', $genders);
-        
-        return $this->render('auth.register');
+        $this->data('genders', $genders);*/
+
+        if($request->ajax()) {
+            try {
+                return [
+                    'status' => 'success',
+                    'html' => view('partials.popups.register')->render(),
+                ];
+            } catch (Exception $e) {
+                return [
+                    'status' => 'error',
+                    'message' => trans('messages.an error has occurred, try_later'),
+                ];
+            }
+        } else {
+            \Meta::title(trans('front_labels.sign up'));
+            return $this->render('auth.register');
+        }
     }
     
     /**
      * @param \App\Http\Requests\Frontend\Auth\UserRegisterRequest $request
-     * @param \App\Services\AuthService                            $authService
      *
      * @return mixed
      */
-    public function postRegister(UserRegisterRequest $request, AuthService $authService)
+    public function postRegister(UserRegisterRequest $request)
     {
-        $input = $request->all();
+
+        $input = [];
+
+        //If default register first step
+        if($request->ajax() && $request->has('first_step')) {
+
+            session()->flash('register["email"]', $request->input('email'));
+
+            $html = view('partials.popups.register.second')->render();
+
+            return ['status' => 'success', 'html' => $html];
+        }
+
+        //generate full request for register user
+        if(session()->has('register["email"]')) {
+
+            $request->merge(['email' => session('register["email"]')]);
+
+            //oauth user
+        } elseif(session()->has('oauth_user')) {
+
+            $oauth_user = session()->pull('oauth_user');
+
+            //Remove wrong email from array
+            unset($oauth_user['email']);
+
+            $request->merge($oauth_user);
+
+        } /*else {
+
+            if($request->ajax()) {
+                return ['status' => 'error', 'message' => trans('messages.user register error')];
+            } else {
+                \FlashMessages::add('error', trans('messages.user register error'));
+                return redirect()->back()->withInput($request->all());
+            }
+
+        }*/
         
         DB::beginTransaction();
         
-        try {
-            $this->validateImage('image');
+//        try {
+            //$this->validateImage('image');
             
             $input = $this->authService->prepareRegisterInput($request);
             
-            $user = $authService->register($input);
+            $user = $this->authService->register($input);
 
             $this->userService->processUserInfo($user, $input);
 
             $this->userService->processFields($user);
+
+            $this->authService->proccessOauth($user, $request->only(['oauth_id', 'provider']));
             
-            Event::fire(new UserRegister($user, $input));
+            //Event::fire(new UserRegister($user, $input));
+
+            if(isset($input['activated']) && $input['activated']) {
+
+                Sentry::login($user, false);
+
+            } else {
+
+                FlashMessages::add(
+                    'success',
+                    trans('messages.user register success message')
+                );
+
+            }
             
             DB::commit();
-            
-            FlashMessages::add(
-                'success',
-                trans('messages.user register success message')
-            );
-            
-            return redirect()->to($this->getRedirectTo());
-        } catch (NotValidImageException $e) {
-            FlashMessages::add(
-                'error',
-                trans('messages.trying to load is too large file or not supported file extension')
-            );
+
+            if($request->ajax()) {
+
+                return ['status' => 'success', 'redirect' => $this->getRedirectTo()];
+
+            } else {
+
+                return redirect()->to($this->getRedirectTo());
+
+            }
+
+        /*} catch (NotValidImageException $e) {
+            $message = trans('messages.trying to load is too large file or not supported file extension');
         } catch (Exception $e) {
             $message = trans('messages.user register error');
-        }
-        
+        }*/
+
         DB::rollBack();
         
-        FlashMessages::add('error', $message);
-        
-        return redirect()->back()->withInput($input);
+        dd('here');
+
+        if($request->ajax()) {
+            return ['status' => 'error', 'message' => $message];
+        } else {
+            return redirect()->back()->withInput($input)->withErrors($message);
+        }
     }
     
     /**
@@ -341,6 +435,84 @@ class AuthController extends FrontendController
         FlashMessages::add('error', $error);
         
         return redirect()->home();
+    }
+
+    public function oauth(Request $request, $provider)
+    {
+
+        if(Sentry::check()) {
+
+            return redirect($this->getRedirectTo());
+
+        }
+
+        session()->forget('oauth_user');
+
+        $provider = Oauth::visible()->where('name', $provider)->first();
+
+        if(!$provider) {
+            \App::abort(404);
+        }
+
+        $code = $request->has('code') ? $request->get('code') : null;
+
+        $result = $this->authService->oauth($provider, $code);
+
+        //user already exists
+        if(is_object($result)) {
+
+            Sentry::login($result, false);
+
+            return redirect()->to($this->getRedirectTo());
+
+            //have to generate new user
+        } elseif(is_array($result)) {
+
+            session()->put('oauth_user', $result);
+
+            if(isset($result['email']))
+            {
+
+                $user = User::where('email', $result['email'])->first();
+
+                //email is empty
+                if(!$user) {
+
+                    $userRegisterRequest = new UserRegisterRequest();
+
+                    $userRegisterRequest->merge(['email' => $result['email']]);
+
+                    return $this->postRegister($userRegisterRequest);
+
+                    //email is not empty
+                } else {
+
+                    \Meta::title(trans('front_labels.email exist'));
+
+                    return $this->render('partials.popups.register.email_exist',
+                        ['result' => $result,
+                            'user' => $user,
+                            'message' => trans('front_messages.that is not my email message'),
+                            'post_register' => route('auth.post.register')
+                        ]);
+
+                }
+
+            }
+
+            \Meta::title(trans('front_labels.registration completion'));
+
+            return $this->render('partials.popups.register.oauth', ['result' => $result]);
+
+        } elseif($code) {
+
+            $error = trans('messages.an error has occurred, try_later');
+
+            FlashMessages::add('error', $error);
+
+            return redirect()->home();
+        }
+
     }
     
     /**

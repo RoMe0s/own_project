@@ -15,20 +15,17 @@
                 {!! $errors->first() !!}
             @endif
         </p>
-        <div class="col-md-8 col-md-offset-2">
-            {!! Form::text('email', null, ['class' => 'required', 'placeholder' => trans('front_labels.email')]) !!}
-        </div>
-        <div class="col-md-4 col-md-offset-4">
-            {!! Form::submit(trans('front_labels.next step')) !!}
+        <div class="fields">
+            @include('partials.popups.register.first')
         </div>
         {!! Form::close() !!}
     </div>
     <div class="clearfix"></div>
-    <div class="text-center">
-        {!! trans('front_labels.already have?') !!}
-        <a href="{!! route('auth.get.login') !!}">
-            {!! trans('front_labels.sign in') !!}
+    <div class="text-center links">
+        <a class="auth_popup_button" href="{!! route('auth.get.login') !!}">
+            {!! trans('front_labels.already have?') !!}
         </a>
+        @widget__oauth()
     </div>
     @include('partials.popups.bottom')
 </div>

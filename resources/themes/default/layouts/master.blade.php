@@ -9,15 +9,18 @@
 </head>
 <body>
     @include('partials.header')
-    <div class="content">
-        @widget__categories_menu()
-        <div class="container">
+        <div class="container content">
             @widget__breadcrumbs($breadcrumbs)
-    @yield('content')
+            @yield('content')
         </div>
+    <div class="messages">
+        @foreach (['error', 'info', 'success'] as $key)
+            @if($flashMessages->has($key))
+                @include('partials.popups.message', ['status' => $key, 'message' => implode('', $flashMessages->get($key))])
+            @endif
+        @endforeach
     </div>
     @include('partials.footer')
     @include('partials.scripts')
-    {{-- @include('partials.popups.register') --}}
 </body>
 </html>

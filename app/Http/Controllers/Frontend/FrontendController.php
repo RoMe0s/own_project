@@ -68,6 +68,8 @@ class FrontendController extends BaseController implements Breadcrumbs
 
         $this->fillThemeData();
 
+        $this->data('flashMessages', $messages = \FlashMessages::retrieve());
+
     }
 
     /**

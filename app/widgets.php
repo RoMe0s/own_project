@@ -27,3 +27,5 @@ Widget::register('widget__rightside_menu', 'App\Widgets\RightsideMenu\RightsideM
 Widget::register('widget__breadcrumbs', 'App\Widgets\Breadcrumbs\Breadcrumbs@index');
 
 Widget::register('widget__categories_menu', 'App\Widgets\CategoriesMenu\CategoriesMenu@index');
+
+Widget::register('widget__oauth', 'App\Widgets\OAuth\OAuthWidget@index');
