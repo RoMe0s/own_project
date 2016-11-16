@@ -205,7 +205,7 @@ return [
         Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
 
 //        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Barryvdh\TranslationManager\ManagerServiceProvider::class,
+//        Barryvdh\TranslationManager\ManagerServiceProvider::class,
 
 
         App\Providers\SearchServiceProvider::class,
