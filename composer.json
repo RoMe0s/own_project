@@ -37,7 +37,7 @@
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
         "symfony/css-selector": "3.1.*",
-        "barryvdh/laravel-ide-helper": "2.*",
+        "barryvdh/laravel-ide-helper": "*",
         "symfony/dom-crawler": "3.1.*",
         "barryvdh/laravel-translation-manager": "dev-master"
     },
