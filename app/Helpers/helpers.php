@@ -653,6 +653,6 @@ if(! function_exists('cache')) {
             return app('cacheService');
         }
 
-        return \App\Services\CacheService::init($classname, $key_field)->where($key)->get();
+        return \App\Services\CacheService::init($classname, $key_field)->items();
     }
 }

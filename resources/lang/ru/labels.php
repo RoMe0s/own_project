@@ -1,6 +1,7 @@
 <?php
 
 return array (
+    'is_dropdown' => 'Выпадающее меню',
   'accept' => 'Подтвердить',
   'actions' => 'Действия',
   'activate_profile_as_action' => 'Активировать профиль',

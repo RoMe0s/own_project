@@ -14,7 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "*",
+    "jquery": "2.*",
     "jquery-ui": "~1.11.4",
     "bootstrap": "~3.3.2",
     "bootbox": "~4.2.0",

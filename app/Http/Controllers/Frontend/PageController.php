@@ -48,8 +48,9 @@ class PageController extends FrontendController
      * @param integer $count
      * @return $this
      */
-    public function getHome(Request $request, $count = 5)
+    public function getHome(Request $request, $count = 15)
     {
+
         $model = Page::withTranslations()->whereSlug('home')->first();
 
         abort_if(!$model, 404);
@@ -59,7 +60,7 @@ class PageController extends FrontendController
         $this->fillMeta($model);
 
         if($request->ajax()) {
-            return NewsService::loadNews($count);
+            return NewsService::loadNews($count, null, 'block_list');
         }
 
         $this->data('count', $count);
@@ -74,8 +75,6 @@ class PageController extends FrontendController
     {
         $slug = func_get_args();
         $slug = array_pop($slug);
-
-        return $slug;
 
         if ($slug == 'home') {
             return redirect(route('home'), 301);

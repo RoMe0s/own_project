@@ -9,6 +9,7 @@
 </head>
 <body>
     @include('partials.header')
+    @widget__categories_menu()
         <div class="container content">
             @widget__breadcrumbs($breadcrumbs)
             @yield('content')

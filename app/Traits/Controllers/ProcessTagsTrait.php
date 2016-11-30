@@ -9,7 +9,6 @@
 namespace App\Traits\Controllers;
 
 use App\Models\Tag;
-use App\Models\Tagged;
 
 /**
  * Class ProcessTagsTrait
@@ -53,7 +52,7 @@ trait ProcessTagsTrait
     {
         $selected_tags = [];
         if ($model) {
-            $selected_tags = $model->tags->lists('tag_id')->toArray();
+            $selected_tags = $model->tags->lists('id')->toArray();
         }
 
         return $selected_tags;
@@ -65,7 +64,7 @@ trait ProcessTagsTrait
      */
     private function _removeDeleted($model, $tags = [])
     {
-        $model->tags()->whereNotIn('tag_id', $tags)->delete();
+        $model->tags()->whereNotIn('tag_id', $tags)->detach();
     }
 
     /**
@@ -78,9 +77,9 @@ trait ProcessTagsTrait
 
         foreach ($tags as $tag_id) {
             if (!in_array($tag_id, $exists)) {
-                $tagged = new Tagged(['tag_id' => $tag_id]);
 
-                $model->tags()->save($tagged);
+                $model->tags()->attach(['tag_id' => $tag_id]);
+
             }
         }
     }

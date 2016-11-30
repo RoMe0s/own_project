@@ -1,0 +1,65 @@
+.categories-list, .category-list
+  background-color: $white
+  box-shadow: $shadow
+  .category-item
+    padding: 1em 0
+    .short-content
+      overflow: hidden
+      position: relative
+      @include bp($phone)
+        max-height: 150px
+        &::after
+          content: ''
+          position: absolute
+          bottom: 0
+          left: 0
+          height: 15%
+          width: 100%
+          background: $gradient
+      p
+        text-indent: 1cm
+    a
+      color: $light_blue
+      &:hover, &:active
+        text-decoration: none
+        color: $dark_blue
+    h2
+      margin: 0
+      font-size: 21px
+      border-bottom: 1px solid $light_blue
+    .small-info
+      color: $dark_blue
+      font-size: 0.95em
+      padding: 0 1em
+      margin: 0
+    h2, .short-content
+      padding: 0px 1em
+    .image
+      width: 100%
+      text-align: center
+      margin-bottom: 1em
+      img
+        max-width: 100%
+    &.title
+      margin: 0
+      border-bottom: 1px solid $bg
+      display: table
+      width: 100%
+      h1
+        margin: 0
+        padding: 4px 10px
+        float: left
+        width: calc(100% - 50px)
+      a
+        float: right
+        font-size: 24px
+        width: 50px
+        text-align: center
+      .description
+        padding: 0 1em
+        clear: both
+        color: $grey
+        p
+          text-indent: 1cm
+      *
+        color: $grey

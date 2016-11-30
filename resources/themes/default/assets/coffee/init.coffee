@@ -2,34 +2,57 @@
 # Created by rome0s on 10/28/16.
 ###
 
-$.mobile.ajaxEnabled = false
+id = undefined
+
+news_block_function = ->
+  news_block = $('.news-block')
+  news_block.css('opacity', '0.4')
+  if news_block.css('display') != 'block'
+    news_block.height(news_block.width())
+  clearTimeout id
+  id = setTimeout((->
+    $('.news-block').animate { opacity: 1 }
+    return
+  ), 200)
 
 $(document).ready ->
-
-  window.erase_messages()
   $('[data-toggle="tooltip"]').tooltip()
+
+  news_block = $('.news-block')
+  if news_block.css('display') != 'block'
+    news_block.height(news_block.width())
+  news_block.animate({
+    opacity: 1
+  }, 300);
 
   #NEWS LOAD
   $('.load_more').on 'click', 'a', (event) ->
-    $before = $(this).closest('div.load_more')
-    loader_init $before, 'before'
-    $this = $(this)
-    $this.css 'pointer-events', 'none'
-    count = $('.content-grid div.news').length
+    news_list = $('div.news_list')
+    block = false
+    _this = $(this)
+    loader_init news_list
+    _this.css 'pointer-events', 'none'
+    if(news_list.children('div.news').length)
+      count = news_list.children('div.news').length
+    else
+      count = news_list.children('div.news-block').length
+      block = true
     $.ajax(
-      url: window.location.pathname + count
+      url: $(this).attr('href') + '/' + count
       type: 'GET'
       data: {}).done((response) ->
-      if response.status == 'success'
-        $before.before response.data
-      else
-        error_message response.status, response.message
-      loader_remove()
-      $this.css 'pointer-events', ''
-      return
+        if response.status == 'success'
+          news_list.append response.data
+          if block
+            news_block_function()
+        else
+          message.show response.message, response.status
+        loader_remove news_list
+        _this.css 'pointer-events', ''
+        return
     ).error ->
-      loader_remove()
-      $this.css 'pointer-events', ''
+      loader_remove news_list
+      _this.css 'pointer-events', ''
       return
     event.preventDefault()
     return
@@ -55,10 +78,18 @@ $(document).ready ->
   #End show search//
 
   $('div.menu-mobile-button').on 'click', 'a', ->
-    top_menu = $('nav#top_menu')
-    top_menu.show()
+    $('nav#top_menu').show()
 
   $('nav#top_menu').on 'swipeleft', ->
-    if $('div.menu-mobile-button').is(':visible')
+    if $(this).css('left') == '0px' && $('div.menu-mobile-button').is(':visible')
       $(this).hide()
+      return
+
+  $('nav#top_menu').on 'swiperight', ->
+    if $(this).css('right') == '0px' && $('div.menu-mobile-button').is(':visible')
+      $(this).hide()
+      return
+
+  $(window).on 'resize', ->
+    news_block_function()
 

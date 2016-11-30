@@ -81,37 +81,64 @@ class NewsService
      */
     public function getRelatedNewsForNews(News $model, $count = 4)
     {
-        $model->related_news = unserialize(Cache::get('related_news_for_news_'.$model->id, false));
 
-        if ($model->related_news === false) {
-            if (count($model->tags)) {
-                $tagged = Tagged::whereIn('tag_id', array_pluck($model->tags->toArray(), 'tag_id'))
-                    ->where('taggable_id', '<>', $model->id)
-                    ->whereRaw('taggable_type = \''.str_replace('\\', '\\\\', News::class).'\'')
-                    ->get();
+        $result = [];
 
-                if (count($tagged) > $count) {
-                    $tagged = $tagged->random($count);
+        if (count($model->visible_tags)) {
 
-                    if (count($tagged) == 1) {
-                        $tagged = Collection::make([$tagged]);
-                    }
+            $tags = Tagged::whereIn('tag_id', $model->visible_tags->lists('id')->toArray())->get();
+
+            foreach($tags as $tag) {
+
+                if($tag->taggable_id != $model->id) {
+                    $result[] = $tag->taggable_id;
                 }
 
-                $model->related_news = News::with('translations')
-                    ->whereIn('id', array_pluck($tagged->toArray(), 'taggable_id'))
-                    ->get();
-            } else {
-                $model->related_news = [];
             }
 
-            Cache::add('related_news_for_news_'.$model->id,
-                serialize($model->related_news),
-                config('news.related_news_cache_time')
-            );
+            if (count($result) > $count) {
+
+                $result = array_rand(array_shift($result), $count);
+
+            } else {
+
+                $news_elems = cache('News', 'slug')->where($model->category_id, 'category_id')->get();
+
+                $new_count = $count - count($result);
+
+                if(count($news_elems) > $new_count) {
+
+                    $elems = array_rand($news_elems, $new_count);
+
+                } else {
+
+                    $elems = array_rand($news_elems, count($news_elems));
+
+                }
+
+                foreach($elems as $item)
+                {
+
+                    if(!in_array($news_elems[$item]->id, $result) && $news_elems[$item]->id != $model->id) {
+                        $result[] = $news_elems[$item]->id;
+                    }
+
+                }
+
+            }
+
         }
 
-        return $model->related_news;
+        $related_news = [];
+
+        foreach($result as $item) {
+
+            $related_news[] = cache('News','slug')->where($item, 'id')->first();
+
+        }
+
+        return $related_news;
+
     }
 
     /**
@@ -135,18 +162,33 @@ class NewsService
      * @param boolean $use_cache
      * @return array
      */
-    public static function loadNews($count, $use_cache = true)
+    public static function loadNews($count, $category_id = null, $template = null)
     {
-        try {
-                if($use_cache) {
-                    $list = CacheService::init('News', 'slug')->items()->setRange(5, $count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
-                } else {
-                    $list = News::with(['comments', 'translations'])->visible()->publishAtSorted()->positionSorted()->limit(5)->offset($count)->get();
-                }
-                return ['status' => 'success', 'data' => view('widgets.last_news.templates.index', compact('list'))->render()];
-            } catch (\Exception $e) {
-                return ['status' => 'error', 'message' => trans('messages.an error has occurred, try_later')];
-            }
+
+        if(!isset($category_id)) {
+
+            $list = CacheService::init('News', 'slug')->items()->setRange(5, $count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
+
+        } else {
+
+            $list = CacheService::init('News', 'slug')->items()->where($category_id, 'category_id')->setRange(5, $count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
+
+        }
+
+        if($template && view()->exists("partials.news.$template")) {
+
+            $view = view("partials.news.$template", compact('list'))->render();
+
+        } else {
+
+            $view = view('partials.news.list', compact('list'))->render();
+
+        }
+
+        if(sizeof($list))
+            return ['status' => 'success', 'data' => $view];
+
+            return ['status' => 'error', 'message' => trans('front_messages.there is no more news')];
     }
 
 }

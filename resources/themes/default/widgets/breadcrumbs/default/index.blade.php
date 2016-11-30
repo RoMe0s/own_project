@@ -3,21 +3,16 @@
         @foreach($breadcrumbs as $key => $value)
             @if($value['url'] != url()->current())
             <li>
-                <a href="{!! $value['url'] !!}">
-                    <span>
-                        {!! $value['name'] !!}
-                    </span>
-                </a>
-            </li>
+                <a href="{!! url($value['url']) !!}">
             @else
-            <li class="active">
-                <a href="{!! $value['url'] !!}">
+                <li class="active">
+                    <a>
+                    @endif
                     <span>
                         {!! $value['name'] !!}
                     </span>
                 </a>
             </li>
-            @endif
         @endforeach
     @endif
 </ol>

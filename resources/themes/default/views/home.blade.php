@@ -1,16 +1,19 @@
 @extends('layouts.master')
 
 @section('content')
-            <div>
-                <div class="col-md-9">
-                @widget__last_news(null, $count)
-                    <div class="text-center load_more" style="padding: 20px 0px; width: 100%;">
-                        <a href="{!! route('home', ['count' => $count+5]) !!}" type="button" style="width: 100%; display: block; padding: 5px;">{!! trans('front_labels.load more') !!}</a>
+                <div class="col-md-8">
+                    @widget__last_news('blocks', null, $count)
+                    <div class="clearfix"></div>
+                    <div class="text-center load_more">
+                        <a href="{!! route('home') !!}" title="{!! trans('front_labels.load more') !!}">
+                            <i class="fa fa-circle" aria-hidden="true"></i>
+                            <i class="fa fa-circle" aria-hidden="true"></i>
+                            <i class="fa fa-circle" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="col-md-3">
-                @widget__rightside_menu()
+                <div class="col-md-4">
+                    @widget__rightside_menu()
                 </div>
-                <div class="clearfix"></div>
-            </div>
+    <div class="clearfix"></div>
 @endsection

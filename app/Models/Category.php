@@ -58,7 +58,7 @@ class Category extends Eloquent implements FrontLink, SearchableContract, MetaGe
 
     public static function getBaseQuery()
     {
-        return Category::with(['childs', 'translations'])->visible();
+        return Category::with(['childs', 'translations', 'news', 'parents'])->visible();
     }
 
     /**
@@ -94,15 +94,17 @@ class Category extends Eloquent implements FrontLink, SearchableContract, MetaGe
     {
         $result = [];
 
-        $obj = $this->parents->toArray();
-        //dd($obj);
+        if($this->parents) {
+            $obj = $this->parents->toArray();
+            //dd($obj);
 
-        while (isset($obj) && !empty($obj)) {
-            if($obj['status']) {
-                $result[] = ['name' => $obj['name'], 'url' => $obj['slug']];
+            while (isset($obj) && !empty($obj)) {
+                if ($obj['status']) {
+                    $result[] = ['name' => $obj['name'], 'url' => $obj['slug']];
+                }
+
+                $obj = $obj['parents'];
             }
-
-            $obj = $obj['parents'];
         }
         return array_reverse($result);
     }
@@ -243,9 +245,22 @@ class Category extends Eloquent implements FrontLink, SearchableContract, MetaGe
     /**
      * @return string
      */
+    public function getContent()
+    {
+        return empty($this->content) ? $this->short_content : $this->content;
+    }
+
+    /**
+     * @return string
+     */
     public function getMetaKeywords()
     {
         return $this->meta_keywords;
+    }
+
+    public function getShortContent()
+    {
+        return !empty($this->short_content) ? $this->short_content : $this->content;
     }
 
 

@@ -43,10 +43,13 @@ class News extends Eloquent implements FrontLink, SearchableContract, MetaGettab
      */
     public static function getBaseQuery()
     {
-        return News::with(['translations', 'visible_category', 'visible_tags', 'visible_category', 'visible_category.parents', 'visible_category.translations'])
+        return News::with(['translations', 'visible_category', 'visible_tags', 'visible_tags.translations', 'visible_category', 'visible_category.parents', 'visible_category.translations'])
             ->visible()
             //->publishAtSorted()
             //->positionSorted()
+            ->whereHas('visible_category', function($query) {
+                $query->where('status', true);
+            })
             ->countComments();
     }
 

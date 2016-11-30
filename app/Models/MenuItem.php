@@ -40,6 +40,7 @@ class MenuItem extends Model
         'position',
         'status',
         'register_only',
+        'is_dropdown'
     ];
 
     /**

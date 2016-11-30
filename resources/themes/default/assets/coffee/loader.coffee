@@ -6,19 +6,12 @@
 
 #LOADER START
 
-loader_init = ($element, type) ->
-  switch type
-    when 'before'
-      $element.before '<div class="text-center loader">' + '<img src="/uploads/loaders/loader.svg" />' + '</div>'
-    when 'after'
-      $element.after '<div class="text-center loader">' + '<img src="/uploads/loaders/loader.svg" />' + '</div>'
-    else
-      $element.html '<div class="text-center loader">' + '<img src="/uploads/loaders/loader.svg" />' + '</div>'
-      break
+loader_init = ($element) ->
+  $element.append '<div id="loader"><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>'
   return
 
-loader_remove = ->
-  $('.loader').remove()
+loader_remove = ($element)->
+  $element.find('#loader').remove()
   return
 
 # ---

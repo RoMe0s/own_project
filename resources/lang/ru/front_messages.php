@@ -1,5 +1,6 @@
 <?php
 return [
+    'go' => 'Перейти',
     'view all in category' => 'Показать все в категории',
     'leave a comment' => 'Оставить комментарий',
     'auth message' => 'Вход',
@@ -14,6 +15,7 @@ return [
     'that is not my email message' => 'Введите другой существующий Email',
     'more categories' => 'Перейти к списку всех категорий',
     'search' => 'Нажмите для поиска',
-    'use oauth' => 'Используйте сервис для входа'
+    'use oauth' => 'Используйте сервис для входа',
+    'there is no more news' => 'Больше новостей нету'
 
 ];

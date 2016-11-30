@@ -52,9 +52,9 @@ class NewsController extends FrontendController
 
         $model = CacheService::init('News', 'slug')->items()->getAndSetIfNotExist($slug, $query);
 
-        abort_if(!$model, 404);
+        abort_if(!$model || !$model->visible_category, 404);
 
-        //$this->newsService->getRelatedNewsForNews($model);
+        $this->newsService->getRelatedNewsForNews($model);
 
         $this->data('model', $model);
 
@@ -72,12 +72,12 @@ class NewsController extends FrontendController
             foreach ($model->visible_category->getParents() as $item) {
                 $this->breadcrumbs(
                     $item['name'],
-                    $item['url']
+                    route('category', ['slug' => $item['url']])
                 );
             }
             $this->breadcrumbs(
-                $model->category->name,
-                $model->category->slug
+                $model->visible_category->name,
+                route('category', ['slug' => $model->visible_category->slug])
             );
             $this->breadcrumbs(
                 $model->name,

@@ -1,0 +1,151 @@
+.news-show
+  background-color: $white
+  box-shadow: $shadow
+  .image
+    width: 100%
+    text-align: center
+    img
+      max-width: 100%
+  h3
+    margin-top: 0
+  .image
+    margin-bottom: 1em
+  .news-content
+    padding: 0px 15px 0px 15px
+    position: relative
+    color: $grey
+  .title
+    padding: 1em 0
+    .small-info
+      color: $dark_blue
+      padding: 0 1em
+      margin: 0
+    h1
+      padding: 0 1em
+      color: $light_blue
+      border-bottom: 1px solid $light_blue
+      margin: 0
+  .comment-form
+    padding: 1em
+    input
+      margin: 0px 0 10px 0
+    div[contenteditable="true"]
+      min-height: 20px
+      max-height: 150px
+      overflow: hidden
+      margin-bottom: 10px
+      &:empty:before
+        content: attr(placeholder)
+        display: block /* For Firefox */
+        color: #999999
+  .news-content
+    max-height: 100%
+  .tags-list
+    padding: 1em
+    list-style: none
+    display: table
+    li
+      float: left
+      background-color: $bg
+      padding: 5px
+      margin: 0px 0px 5px 5px
+      a
+        color: $light_blue
+      &:active,&:hover
+        background-color: $light_blue
+        a
+          text-decoration: none
+          color: $white
+
+.comments-list
+  padding: 1em 1em 0 1em
+  list-style: none
+  margin: 0
+  li
+    border-bottom: 1px solid $bg
+    display: block
+    position: relative
+    min-height: 70px
+    margin-top: 10px
+    &:last-child
+      border: none
+    .comment-content
+      border-top: 1px solid $light_blue
+      padding: 5px 0px 5px 5px
+      margin-right: 10px
+    .name
+      color: $light_blue
+      font-size: 1.2em
+    .date
+      color: $grey
+      font-size: 0.65em
+    .answer
+      cursor: pointer
+      float: right
+      margin-right: 10px
+      margin-top: 4px
+      padding: 0px 7px 0px 7px
+      background-color: $light_blue
+      color: $white
+      &:hover,&:active
+        color: $dark_blue
+        text-decoration: none
+    .avatar
+      background-color: $white
+      width: 60px
+      height: 60px
+      float: left
+      padding: 5px
+      img
+        border: 2px solid $light_blue
+        border-radius: 100%
+        height: 50px
+        width: 50px
+
+.news-media
+  position: relative
+  text-align: center
+  height: 120px
+  overflow: hidden
+  background-color: $light_blue
+  .prev, .next
+    width: 10%
+    line-height: 120px
+    display: block
+    float: left
+    font-size: 2.3em
+    color: $white
+    cursor: pointer
+    @include bp($phone)
+      font-size: 1.5em
+    &:hover, &:active
+      color: $dark_blue
+  .thumbs
+    margin: 10px 0px
+    width: 80%
+    float: left
+    overflow: hidden
+    height: 100px
+    .thumb
+      position: relative
+      background-size: cover
+      background-position: 50%
+      display: inline-block
+      height: 100px
+      width: 100px
+      .cover
+        display: none
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        line-height: 100px
+        font-size: 2em
+        color: $white
+        background-color: $black_cover
+      &:hover, &:active
+        .cover
+          display: block
+
+

@@ -1,37 +1,26 @@
 @if(sizeof($categories))
-<nav class="categories_menu">
-    <ul>
-        <div class="pull-left left_part">
+<nav class="categories-menu">
+    <ul class="container">
+        <div class="left-side">
         @foreach($categories as $key => $value)
-            @if($value->slug == Request::path())
+            @if(route('category', ['slug' =>  $value->slug]) == Request::url())
             <li class="active">
+                <a>
                 @else
                     <li>
+                <a href="{!! route('category', ['slug' =>  $value->slug]) !!}">
                     @endif
-                <a href="#">
                     {!! $value->name !!}
                 </a>
             </li>
         @endforeach
         </div>
-            <div class="right_part pull-right text-center">
-                <li class="search_form">
-                    {!! Form::open(['url' => route('search.index'), 'method' => 'GET']) !!}
-                    {!! Form::text('search_text', null, ['placeholder' => trans('front_labels.search'), 'required']) !!}
-                    {!! Form::close() !!}
-                </li>
-                <li class="show_search">
-                    <a href="#">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" title="{!! trans('front_messages.more categories') !!}" data-toggle="tooltip" data-placement="bottom">
-                        <i class="fa fa-bars" aria-hidden="true"></i>
-                    </a>
-                </li>
-            </div>
-    </ul>
+        <div class="dropdown right-side" title="{!! trans('front_messages.view all in category') !!}">
+                <ul class="dropdown-menu">
+                </ul>
+            <a href="{!! route('pages.show', ['slug' => 'categories']) !!}" data-toggle="dropdown">
+                <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+            </a>
+        </div>
 </nav>
-    <div class="clearfix"></div>
 @endif

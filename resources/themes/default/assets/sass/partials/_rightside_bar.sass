@@ -1,0 +1,92 @@
+.rightside-bar
+  .block
+    background-color: $white
+    box-shadow: $shadow
+    padding-bottom: 5px
+    margin-bottom: 25px
+    .title
+      font-family: "Exo 2", sans-serif
+      font-size: 1.6em
+      border-bottom: 1px solid $bg
+      padding: 5px 5px 5px 10px
+      color: $grey
+      margin-bottom: 5px
+    a
+      display: block
+      font-size: 16px
+      padding: 3px 1em 3px 1em
+      min-height: 50px
+      border-left: 2px solid transparent
+      .short-content
+        font-size: 0.8em
+        line-height: 1.5em
+        color: $grey
+        max-height: 4.5em
+        overflow: hidden
+      &.active, &:hover, &:active
+        color: $dark_blue
+        border-color: $light_blue
+        text-decoration: none
+        background-color: $bg
+
+
+    ul
+      list-style: none
+      margin: 0
+      li
+        margin-bottom: 5px
+        &:last-child
+          margin-bottom: 0
+        a
+          font-size: 16px
+          display: block
+          padding: 5px
+          text-align: center
+          min-height: inherit
+          &:hover, &:active
+            color: $white
+            background-color: $light_blue
+
+    .small-boxes
+      display: table
+      margin-top: -5px
+      li
+        float: left
+        background-color: $bg
+        margin: 0
+        margin-left: 5px
+        margin-top: 5px
+        a
+          color: $light_blue
+
+
+//extended popular news
+  .popular-news
+    .row
+      border-color: black
+    h3
+      color: $light_blue
+      margin-top: 0px
+      font-size: 14px
+    .thumbnail
+      @include bp($phone, $desktop)
+        border: none
+    .caption
+      a
+        display: block
+        margin: 5px
+        &:hover,&:active
+          color: $dark_blue
+      .short-content
+        position: relative
+        max-height: 150px
+        overflow: hidden
+        &::after
+          content: ''
+          position: absolute
+          bottom: 0
+          left: 0
+          height: 20%
+          width: 100%
+          background: $gradient
+//

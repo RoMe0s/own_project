@@ -1,7 +1,11 @@
 <?php
 
 return array (
+    'answer' => 'Ответить',
   'read more' => 'Читать полностью',
+    'tag list' => 'Список тегов:',
+    'comment list' => 'Список комментариев',
+    'category list' => 'Список категорий',
     'load more' => 'Больше статей',
     'popular news' => 'Популярные новости',
     'archives' => 'Архивы',

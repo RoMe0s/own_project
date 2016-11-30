@@ -108,5 +108,5 @@ return array (
   'your feedback successfully send to' => 'Ваше сообщение успешно отправлено для ',
   'you can\\\\\\\'t edit this translations group' => 'Вы не можете редактировать эту группу переводов',
   'you can\\\'t edit this translations group' => 'Вы не можете редактировать эту группу переводов',
-  'to' => 'до',
+  'to' => 'до'
 );

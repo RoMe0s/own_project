@@ -1,8 +1,6 @@
-<div class="message_popup">
-    <a class="pull-right">
-        <i class="fa fa-times-circle-o" aria-hidden="true"></i>
-    </a>
-    <p class="text-{!! $status !!}">
+<div class="message_popup {!! $status !!}">
+    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+    <p>
         {!! $message !!}
     </p>
 </div>

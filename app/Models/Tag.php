@@ -13,18 +13,20 @@ use App\Contracts\SearchableContract;
 use App\Traits\Models\SearchableTrait;
 use App\Traits\Models\WithTranslationsTrait;
 use Dimsav\Translatable\Translatable;
+use App\Contracts\Cachable as CachableContract;
 use Eloquent;
 
 /**
  * Class Tag
  * @package App\Models
  */
-class Tag extends Eloquent implements FrontLink, SearchableContract
+class Tag extends Eloquent implements FrontLink, SearchableContract, CachableContract
 {
 
     use Translatable;
     use WithTranslationsTrait;
     use SearchableTrait;
+
 
     /**
      * @var array
@@ -53,6 +55,11 @@ class Tag extends Eloquent implements FrontLink, SearchableContract
      * @var array
      */
     protected $guarded = [];
+
+    public static function getBaseQuery()
+    {
+        return Tag::with(['translations', 'taggable'])->visible();
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

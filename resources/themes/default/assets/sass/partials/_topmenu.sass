@@ -1,105 +1,251 @@
 nav#top_menu
   z-index: 10
   height: 50px
-  font-weight: bold
   padding-left: 10%
   padding-right: 10%
-  border-bottom: 2px solid #3e5775
-  background-color: #698ab0
+  border-bottom: 2px solid $dark_blue
+  background-color: $light_blue
   ul
-    list-style: none
-    font-size: 0
-    height: 100%
     li
       display: inline-block
       font-size: 14px
       padding: 0px 10px
       line-height: 50px
       height: 100%
-      @include bp($phone, $tablet)
-        font-size: 12px
-      a
-        color: white
-      &.blacked
-        color: #3e5775
       &.active
-        @include bp($desktop)
-          outline: 2px solid #3e5775
-          background-color: #698ab0
+        outline: 2px solid $dark_blue
+        background-color: $light_blue
         a
-          border-bottom: 2px solid white
+          border-bottom: 2px solid $white
           pointer-events: none
-      @include bp($phone, $tablet)
+        @include bp($phone, $desktop)
+          outline: none
+      a
+        color: $white
+        &.blacked
+          color: $dark_blue
+      @include bp($phone, $desktop)
+        font-size: 12px
         display: block
+    &.dropdown-menu
+      box-shadow: none
+      left: calc(100% - 121px)
+      width: 200px
+      border: 1px solid $dark_blue
+      margin-top: 5px
+      &:before
+        content: ""
+        position: absolute
+        right: 83px
+        top: -9px
+        width: 0
+        height: 0
+        border-style: solid
+        border-width: 0 10px 9px 10px
+        border-color: transparent transparent $white transparent
+        z-index: 9999
+        @include bp($phone, $desktop)
+          display: none
+      &:after
+        content: ""
+        position: absolute
+        right: 81px
+        top: -10px
+        width: 0
+        height: 0
+        border-style: solid
+        border-width: 0 12px 10px 12px
+        border-color: transparent transparent $dark_blue transparent
+        z-index: 9998
+        @include bp($phone, $desktop)
+          display: none
+      li
+        display: block
+        line-height: 2
+        border-bottom: 1px solid $light_blue
+        margin-left: 10px
+        margin-right: 10px
+        text-align: center
+        @include bp($desktop)
+          &.active
+            background-color: $white
+            outline: none
+            a
+              background-color: $white
+              font-weight: bold
+        &:last-child
+          border: none
+        a
+          color: $light_blue
+          &:hover
+            text-decoration: underline
+            background-color: transparent
+      @include bp($phone, $desktop)
+        display: block
+        padding: 0
+        margin: 0
+        position: relative
         width: 100%
+        left: 0
+        background-color: transparent
+        border: none
+        li
+          height: 50px
+          a
+            padding: 0
+            margin: 0
+            line-height: 50px
+            color: $white
   div
     &.right_part
-      float: right
       text-align: right
       li
         &.search_form
           display: none
           input
             height: 30px
+            @include bp($phone, $desktop)
+              display: none !important
         &.show_search
-          @include bp($phone, $tablet)
-            display: none
-      @include bp($phone, $tablet)
+          @include bp($phone, $desktop)
+            display: none !important
+      @include bp($phone, $desktop)
         float: none
         text-align: center
+        li
+          &.auth-buttons
+            display: none
+          a
+            &.blacked
+              display: none
     &.left_part
       float: left
       text-align: left
-      @include bp($phone, $tablet)
+      @include bp($phone, $desktop)
         float: none
         text-align: center
-
-  @include bp($phone, $tablet)
+  @include bp($phone, $desktop)
     display: none
-    min-height: 100%
-    width: 60%
+    height: calc(100% - 40px)
     position: fixed
-    left: 0
-    top: 32px
+    top: 40px
     padding: 2%
-    //padding-top: 30px
+    border-bottom: none
+  @include bp($phone)
+    width: 60%
+    left: 0
+  @include bp($tablet)
+    width: 40%
+    right: 0
 
 
 
 div.mobile-top-panel
-  border-bottom: 2px solid #3e5775
+  border-bottom: 2px solid $dark_blue
   z-index: 100
-  padding-right: 5%
   display: none
   position: fixed
-  background-color: #698ab0
+  background-color: $light_blue
   width: 100%
-  height: 32px
-  .menu-mobile-button
-    height: 32px
-    line-height: 32px
+  height: 40px
+  .menu-mobile-button, .menu-mobile-user
+    font-size: 18px
+    line-height: 40px
     text-align: center
-    width: 14%
+    width: 40px
     float: left
+    @include bp($tablet)
+      float: right
     a
-      color: white
+      color: $white
   .menu-mobile-search
-    width: 86%
+    width: calc(100% - 80px)
     float: right
     input
-      height: 24px
       margin-top: 4px
-      width: 90%
+      width: calc(100% - 40px)
       float: left
+      @include bp($tablet)
+        float: right
     a
+      font-size: 18px
       text-align: center
       float: right
-      color: #3e5775
-      line-height: 32px
-      width: 10%
-  @include bp($phone, $tablet)
+      color: $dark_blue
+      line-height: 40px
+      width: 40px
+  @include bp($phone, $desktop)
     display: block
 
 div.content
-  @include bp($phone, $tablet)
-    padding-top: 15px
+  @include bp($phone, $desktop)
+    padding-top: 25px
+
+
+//categories menu//
+nav.categories-menu
+  height: 34px
+  clear: both
+  background-color: $white
+  box-shadow: $shadow
+  @include bp($phone, $desktop)
+    margin-top: 40px
+  ul
+    height: 100%
+    list-style: none
+    opacity: 0
+  .left-side
+    width: calc(100% - 34px)
+    height: 100%
+    float: left
+    position: relative
+    overflow: hidden
+    li
+      line-height: 32px
+      border-bottom: 2px solid transparent
+      display: block
+      text-align: center
+      padding: 0 10px
+      float: left
+      max-height: 100%
+      &.active
+        border-color: $light_blue
+        a
+          color: black
+      &:hover, &:active
+        border-color: $light_blue
+        a
+          text-decoration: none
+          color: $grey
+  .right-side
+    float: right
+    text-align: center
+    height: 100%
+    line-height: 36px
+    display: block
+    width: 34px
+    .dropdown-menu
+      width: auto
+      right: 0px
+      left: inherit
+      box-shadow: $shadow
+      border: none
+      border-radius: 0
+      height: auto
+      padding: 5px 0px
+      li
+        position: relative
+        max-height: 100px
+        padding: 5px 10px
+        border-left: 2px solid transparent
+        overflow: hidden
+        &.active, &:hover,&:active
+          border-color: $light_blue
+          a
+            text-decoration: none
+            color: $grey
+            background-color: transparent
+        a
+          margin: 0
+          padding: 0
+

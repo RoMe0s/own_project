@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use View;
 use Theme;
 use FlashMessages;
@@ -58,6 +60,8 @@ class BaseController extends IlluminateBaseController
     public function __construct()
     {
         $this->_theme = empty($this->_theme) ? config('app.theme') : $this->_theme;
+
+        Carbon::setLocale(\Lang::getLocale());
 
         $this->_init();
     }

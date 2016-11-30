@@ -1,0 +1,105 @@
+.load_more
+  a
+    color: $grey
+    display: block
+    line-height: 40px
+    &:hover,&:active
+      text-decoration: none
+      color: $dark_blue
+
+
+
+.news_list
+  position: relative
+  display: flex
+  flex-wrap: wrap
+  flex-flow: row wrap
+  .news
+    width: 100%
+
+.news-block
+  position: relative
+  .news
+    flex-flow: column
+  .read-more
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    margin: 0
+    opacity: 0
+  @include bp($phone)
+    display: block
+    width: 100%
+    height: 100% !important
+    margin-left: 0
+    .read-more
+      margin: 10px
+      opacity: 1
+      position: relative
+      width: calc(100% - 20px)
+  opacity: 0
+  display: inline-flex
+  flex-flow: column
+  width: calc(33.333% - 13px)
+  box-shadow: $shadow
+  margin: 0
+  margin-bottom: 10px
+  margin-left: 10px
+  background-color: $white
+  h2
+    margin: 10px 0px 10px 0px
+    color: $light_blue
+  &:hover, &:active
+    text-decoration: none
+    h2
+      color: $dark_blue
+  .image
+    position: relative
+    height: 50%
+    overflow: hidden
+    img
+      width: 100%
+    .small-info
+      display: none
+      font-size: 0.85em
+      color: $white
+      text-align: center
+      position: absolute
+      bottom: 0
+      right: 0
+      min-width: 50%
+      background-color: $light_blue
+      padding: 0px 5px 0px 5px
+      @include bp($tablet)
+        display: block
+        min-width: 70%
+      @include bp($phone)
+        display: block
+        font-size: 0.7em
+        width: 100%
+  .bottom-part
+    position: relative
+    padding: 0px 5px 0px 5px
+    width: 100%
+    overflow: hidden
+    margin-bottom: 5px
+    .short-content
+      color: $grey
+      @include bp($phone)
+        font-size: 0.97em
+        display: block !important
+        max-height: 150px
+      &::after
+        content: ''
+        position: absolute
+        bottom: 0
+        left: 0
+        height: 15%
+        width: 100%
+        background: $gradient
+  &:hover,&:active
+    .image
+      .small-info
+        display: block

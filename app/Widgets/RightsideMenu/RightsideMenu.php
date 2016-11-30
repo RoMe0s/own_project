@@ -21,10 +21,13 @@ class RightsideMenu extends Widget
 {
     function index()
     {
+
         $news = CacheService::init('News', 'slug')->items()->orderBy('view_count', 'DESC')->setRange(10)->get();
 
-        $archive = NewsService::proccessArchive(CacheService::init('News', 'slug')->items()->groupBy('publish_at')->get());
+        $tags = CacheService::init('Tag', 'slug')->items()->get();
 
-        return view('widgets.rightside_menu.index')->with(compact('news', 'archive'))->render();
+        $archive = NewsService::proccessArchive(CacheService::init('News', 'slug')->items()->groupBy('publish_at')->orderBy('publish_at', 'DESC')->get());
+
+        return view('widgets.rightside_menu.index')->with(compact('news', 'archive', 'tags'))->render();
     }
 }

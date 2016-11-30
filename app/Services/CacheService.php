@@ -172,7 +172,7 @@ class CacheService
 
         array_map(function($pos) use (&$result)
         {
-            if($el = static::$data[$pos]) {
+            if(isset(static::$data[$pos]) && $el = static::$data[$pos]) {
                 $result[] = $el;
             }
         }
@@ -186,7 +186,7 @@ class CacheService
      */
     public function first()
     {
-        $key = isset(static::$positions[0]) ? static::$positions[0] : null;
+        $key = reset(static::$positions) !== false ? reset(static::$positions) : null;
 
         return isset(static::$data[$key]) ? static::$data[$key] : null;
     }
@@ -209,15 +209,30 @@ class CacheService
      * @param string|array|int $key
      * @return object
      */
-    public function where($key)
+    public function where($key, $field = null)
     {
-        if(is_array($key)) {
 
-            static::$positions = array_intersect_key(static::$positions, array_flip($key));
+        if(isset($field)) {
+
+            foreach (static::$data as $value) {
+
+                if($value->$field != $key) {
+
+                    unset(static::$positions[array_search($value->{static::$keyfield}, static::$positions)]);
+
+                    unset(static::$data[$key]);
+
+                }
+
+            }
+
+        } elseif (is_array($key)) {
+
+                static::$positions = array_intersect(static::$positions, $key);
 
         } else {
 
-            static::$positions = [$key];
+                static::$positions = [$key];
 
         }
 
@@ -231,6 +246,7 @@ class CacheService
      */
     public function setRange($limit, $offset = 0)
     {
+
         static::$positions = array_slice(static::$positions, $offset, $limit);
 
         return $this;

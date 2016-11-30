@@ -5,11 +5,6 @@ $router->group(
         'middleware' => ['localeSessionRedirect', 'localizationRedirect'],
     ],
     function () use ($router) {
-        // pages
-        $router->get(
-            'pages/{slug1}/{slug2?}/{slug3?}/{slug4?}/{slug5?}',
-            ['as' => 'pages.show', 'uses' => 'Frontend\PageController@getPage']
-        );
 
         // 404
         $router->any('/not-found', ['as' => 'not_found', 'uses' => 'Frontend\PageController@notFound']);
@@ -21,6 +16,9 @@ $router->group(
         // news
         $router->get('news', ['as' => 'news.index', 'uses' => 'Frontend\NewsController@index']);
         $router->get('news/{slug}', ['as' => 'news.show', 'uses' => 'Frontend\NewsController@show']);
+
+        //categories
+        $router->get('category/{slug}/{count?}', ['as' => 'category', 'uses' => 'Frontend\CategoryController@index']);
 
         // comments
         $router->group(
@@ -135,5 +133,12 @@ $router->group(
                 );
             }
         );
+
+        // pages
+        $router->get(
+            'pages/{slug1}/{slug2?}/{slug3?}/{slug4?}/{slug5?}',
+            ['as' => 'pages.show', 'uses' => 'Frontend\PageController@getPage']
+        )->where('slug1', 'categories|faq');
+
     }
 );

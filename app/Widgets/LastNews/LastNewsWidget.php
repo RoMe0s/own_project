@@ -28,10 +28,18 @@ class LastNewsWidget extends Widget
      * @param int  $count
      * @return mixed
      */
-    public function index($template = null, $count = 5)
+    public function index($template = null, $category_id = null, $count = 5)
     {
 
-        $list = CacheService::init('News', 'slug')->items()->setRange($count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
+        if(!isset($category_id)) {
+
+            $list = CacheService::init('News', 'slug')->items()->setRange($count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
+
+        } else {
+
+            $list = CacheService::init('News', 'slug')->items()->where($category_id, 'category_id')->setRange($count)->orderBy(['publish_at' => 'DESC', 'position' => 'ASC'])->get();
+
+        }
 
         if (view()->exists('widgets.last_news.templates.'.$template.'.index')) {
 

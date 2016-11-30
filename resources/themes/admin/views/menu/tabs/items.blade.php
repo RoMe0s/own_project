@@ -4,6 +4,7 @@
         <tr>
             <th>{!! trans('labels.name') !!}<span class="required">*</span></th>
             <th>{!! trans('labels.link') !!}<span class="required">*</span></th>
+            <th class="col-sm-1 col-md-1 col-lg-1">{!! trans('labels.is_dropdown') !!}<span class="required">*</span></th>
             <th class="col-sm-1 col-md-1 col-lg-1">{!! trans('labels.status') !!}<span class="required">*</span></th>
             <th class="col-sm-1 col-md-1 col-lg-1">{!! trans('labels.position') !!}<span class="required">*</span></th>
             <th>{!! trans('labels.delete') !!}</th>
@@ -38,8 +39,13 @@
                         </div>
                     </td>
                     <td>
+                        <div class="form-group required @if ($errors->has('items.old.' .$item->id. '.is_dropdown')) has-error @endif">
+                            {!! Form::select('items[old][' .$item->id. '][is_dropdown]', ['0' => trans('labels.no'), '1' => trans('labels.yes')], $item->is_dropdown, ['id' => 'items.old.' .$item->id. '.is_dropdown', 'class' => 'form-control select2 input-sm', 'aria-hidden' => 'true', 'required' => true]) !!}
+                        </div>
+                    </td>
+                    <td>
                         <div class="form-group required @if ($errors->has('items.old.' .$item->id. '.status')) has-error @endif">
-                            {!! Form::select('items[old][' .$item->id. '][status]', ['1' => trans('labels.status_on'), '0' => trans('labels.status_off')], $item->status, ['id' => 'items.old.' .$item->id. '.position', 'class' => 'form-control select2 input-sm', 'aria-hidden' => 'true', 'required' => true]) !!}
+                            {!! Form::select('items[old][' .$item->id. '][status]', ['1' => trans('labels.status_on'), '0' => trans('labels.status_off')], $item->status, ['id' => 'items.old.' .$item->id. '.status', 'class' => 'form-control select2 input-sm', 'aria-hidden' => 'true', 'required' => true]) !!}
                         </div>
                     </td>
                     <td>
@@ -81,6 +87,11 @@
                         <td>
                             <div class="form-group required @if ($errors->has('items.new.' .$item_key. '.link')) has-error @endif">
                                 {!! Form::text('items[new][' .$item_key. '][link]', $item['link'], ['id' => 'items.new.' .$item_key. '.link', 'class' => 'form-control input-sm', 'required' => true]) !!}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group required @if ($errors->has('items.new.' .$item_key. '.is_dropdown')) has-error @endif">
+                                {!! Form::select('items[new][' .$item_key. '][is_dropdown]', ['0' => trans('labels.no'), '1' => trans('labels.yes')], $item['status'], ['id' => 'items.new.' .$item_key. '.is_dropdown', 'class' => 'form-control select2 input-sm', 'aria-hidden' => 'true', 'required' => true]) !!}
                             </div>
                         </td>
                         <td>
@@ -137,6 +148,14 @@
             <td>
                 <div class="form-group required">
                     <input data-name="items[new][replaseme][link]" data-required="required" class="form-control input-sm">
+                </div>
+            </td>
+            <td>
+                <div class="form-group required">
+                    <select class="form-control select2 input-sm" data-required="required" aria-hidden="true" data-name="items[new][replaseme][is_dropdown]">
+                        <option selected="selected" value="0">@lang('labels.no')</option>
+                        <option value="1">@lang('labels.yes')</option>
+                    </select>
                 </div>
             </td>
             <td>

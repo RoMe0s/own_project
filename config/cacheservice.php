@@ -19,7 +19,9 @@ return array (
 
         'App\Models\Category' => 'slug',
 
-        'App\Models\Menu' => 'name'
+        'App\Models\Menu' => 'name',
+
+        'App\Models\Tag' => 'slug'
     ),
 
 );

@@ -8,11 +8,13 @@
       color: #698ab0
       &:hover
         color: #989898
-  .subscribe_border
-    border: 2px solid #507299
-    padding: 3px
-    &:last-child
-      background-color: #507299
+  .subscribe
+    input, a
+      background-color: $white
+      border: 2px solid $light_blue
+      padding: 3px
+    a
+      background-color: $light_blue
       color: white
 
 /*breadcrumbs
@@ -21,6 +23,8 @@
   padding: 30px 0px 0px 15px
   font-size: 13px
   background-color: inherit
+  @include bp($phone)
+    font-size: 0.8em
 
 /*end message popup
 
@@ -38,3 +42,16 @@
   margin-bottom: 10px
   input[type="submit"]
     margin-bottom: 10px
+
+a.read-more
+  display: block
+  margin: 10px
+  padding: 5px 0px 5px 0px
+  border-radius: 3px
+  text-align: center
+  border: 1px solid $light_blue
+  color: $light_blue
+  &:hover,&:active
+    text-decoration: none
+    color: $dark_blue
+    border-color: $dark_blue

@@ -1,36 +1,53 @@
+<div class="rightside-bar">
 @if(sizeof($news))
-<div class="recent">
-    <h3>
-        {!! trans('front_labels.popular news') !!}
-    </h3>
-    <ul>
+    <div class="block">
+        <div class="title">
+            {!! trans('front_labels.popular news') !!}
+        </div>
         @foreach($news as $item)
-            @if(url()->current() != route('news.show', ['slug' => $item->slug]))
-                <li>
-                    <a href="{!! route('news.show', ['slug' => $item->slug]) !!}">
-                        {!! $item->name !!}
-                    </a>
-                </li>
-            @else
-                <li class="active">
-                    <a href="{!! route('news.show', ['slug' => $item->slug]) !!}">
-                        {!! $item->name !!}
-                    </a>
-                </li>
-            @endif
+        @if(route('news.show', ['slug' => $item->slug]) == url()->current())
+            <a class="active">
+        @else
+            <a href="{!! route('news.show', ['slug' => $item->slug]) !!}">
+        @endif
+                {!! $item->name !!}
+                <div class="short-content">
+                    {!! $item->short_content !!}
+                </div>
+            </a>
         @endforeach
-    </ul>
-</div>
+    </div>
 @endif
-@if(sizeof($archive))
-<div class="recent">
-    <h3>{!! trans('front_labels.archives') !!}</h3>
-    <ul>
-        @foreach($archive as $item)
+@if(sizeof($tags))
+<div class="block">
+    <div class="title">
+        {!! trans('front_labels.tag list') !!}
+    </div>
+    <ul class="small-boxes">
+        @foreach($tags as $item)
         <li>
-            <a href="#">{!! $item['name'] !!}</a>
+            <a href="#" class="col">
+                {!! $item['name'] !!}
+            </a>
         </li>
         @endforeach
     </ul>
 </div>
 @endif
+@if(sizeof($archive))
+    <div class="block">
+        <div class="title">
+            {!! trans('front_labels.archives') !!}
+        </div>
+        <ul>
+            @foreach($archive as $item)
+            <li>
+                <a href="#" class="col">
+                    {!! $item['name'] !!}
+                </a>
+            </li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+</div>

@@ -12,7 +12,6 @@ use App\Events\Backend\NewsDelete;
 use App\Http\Requests\Backend\News\NewsCreateRequest;
 use App\Http\Requests\Backend\News\NewsUpdateRequest;
 use App\Models\News;
-use App\Models\User;
 use App\Services\NewsService;
 use App\Traits\Controllers\AjaxFieldsChangerTrait;
 use App\Traits\Controllers\ProcessTagsTrait;
